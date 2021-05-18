@@ -46,6 +46,33 @@ class ValuationEuropeanMonteCarlo(ValuationClass):
                 return payoff
             except Exception as error:
                 print(f"Maturity date not in time grid of underlying. {error}")
+        elif option_type == 'KnockoutBarrier':
+            try:
+                flags = np.empty(np.shape(paths)[0])
+                for i in range(np.shape(paths)[0]):
+                    if np.amax(paths[i,:]) > barrier:
+                        flags[i] = 0
+                    else:
+                        flags[i] = 1
+                payoff = (eval(self.payoff_func) @ flags) / np.shape(paths)[1]
+                return payoff
+             except Exception as error:
+                print(f"Maturity date not in time grid of underlying. {error}")   
+         elif option_type == 'KnockinBarrier':
+            try:
+                flags = np.empty(np.shape(paths)[0])
+                for i in range(np.shape(paths)[0]):
+                    if np.amax(paths[i,:]) > barrier:
+                        flags[i] = 1
+                    else:
+                        flags[i] = 0
+                payoff = (eval(self.payoff_func) @ flags) / np.shape(paths)[1]
+                return payoff
+             except Exception as error:
+                print(f"Maturity date not in time grid of underlying. {error}")           
+                    
+                    
+                    
         else:
             return None
 
